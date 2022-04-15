@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Weather Dashboard</title>
+</head>
+<body>
+    <header class="hero col-12">
+        <h1>Weather Dashboard</h1>
+    </header>
+    <main class="flex-row">
+        <div class="col-12 col-md-4">
+            <div class="card">
+                <h3 class="card-header text-uppercase">Search for a City</h3>
+                <form id="user-form" class="card-body">
+                    <label for="city-name" class="form-label">City name</label>
+                    <input name="city-name" id="city-name" type="text" autofocus="true" class="form-input" placeholder="New York"/>
+                    <button class="btn" type="submit">Search</button>
+                </form>
+            </div>
+            <!-- form for the city called earlier -->
+            <div class="card">
+                All the city we already searched
+                <!-- city called earlier goes here. as a buttons with a link to submit and display in the browser -->
+            </div>
+        </div>
+        <!-- container for right will hold current information for the city and
+        another line with 5 more days forecast -->
+        <div class="col-12 col-md-8">
+            <div id="current-weather">
+                Current Weather
+            </div>
+            <div id="five-day-forecast">
+                five day forecast
+            </div>
+
+
+
+
+        </div>
+    </main>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
