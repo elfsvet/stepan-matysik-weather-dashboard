@@ -4,33 +4,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"> -->
     <link rel="stylesheet" href="./assets/css/style.css">
     <title>Weather Dashboard</title>
 </head>
 <body>
-    <header class="hero col-12">
-        <h1>Weather Dashboard</h1>
+    <header class="hero is-12">
+        <h1 class="title is-1">Weather Dashboard</h1>
     </header>
-    <main class="flex-row">
-        <div class="col-12 col-md-4">
-            <div class="card">
-                <h3 class="card-header text-uppercase">Search for a City</h3>
+    <main class="columns section level">
+        <div class="column container is-4-desktop level-left">
+            <div class="card level">
+                <h3 class="title is-3 card-header text-uppercase level-item">Search for a City:</h3>
                 <form id="user-form" class="card-body">
-                    <label for="city-name" class="form-label">City name</label>
-                    <input name="city-name" id="city-name" type="text" autofocus="true" class="form-input" placeholder="New York"/>
-                    <button class="btn" type="submit">Search</button>
+                    <label for="city-name" class="form-label level-item">City name</label>
+                    <input name="city-name" id="city-name" type="text" class="level-item input is-rounded" placeholder="Enter city name"/>
+                    <button class="button is-primary level-item has-text-centere" type="submit">Search</button>
                 </form>
             </div>
             <!-- form for the city called earlier -->
-            <div class="card">
+            <div class="card level-item">
                 All the city we already searched
                 <!-- city called earlier goes here. as a buttons with a link to submit and display in the browser -->
             </div>
         </div>
         <!-- container for right will hold current information for the city and
         another line with 5 more days forecast -->
-        <div class="col-12 col-md-8">
+        <div class="column container is-8-desktop level-right">
             <div id="current-weather">
+                <h3 class="title is-3 level-item">name of the city</h3>
                 Current Weather
             </div>
             <div id="five-day-forecast">
