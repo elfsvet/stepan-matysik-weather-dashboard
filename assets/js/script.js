@@ -17,16 +17,23 @@ var cityNameFromInput;
 var cities = [];
 
 var loadCities = function () {
+    // get an array with cities key from localStorage
     var citiesLoad = localStorage.getItem("cities");
+    // if we don't have any cities keys in localStorage
     if (!citiesLoad) {
+        console.log("nothing to load, exit loadCities")
+        // finish the call
         return false;
-    }
-    
-    citiesLoad = JSON.parse(citiesLoad);
-    
-    for (var i = 0; i < citiesLoad.length; i++) {
-        // need to display the buttons inside searched cities
-        cities.push(citiesLoad[i]);
+    } else {
+        console.log("parsing the localstorage")
+        citiesLoad = JSON.parse(citiesLoad);
+        for (var i = 0; i < citiesLoad.length; i++) {
+            // need to display the buttons inside searched cities
+            if (!cities.includes(citiesLoad[i])) {
+                displaySearchedCities(citiesLoad[i])
+                cities.push(citiesLoad[i]); 
+            }
+        }
     }
 };
 
@@ -34,38 +41,52 @@ var loadCities = function () {
 var saveCities = function () {
     localStorage.setItem("cities", JSON.stringify(cities));
 };
-
+// function to display cities as buttons
 var displaySearchedCities = function (city) {
+    var cityButton = "<button class='searched-city-button button is-light'>" + city + "</button>"
+    // add city for the search history here
+    searchedCitiesEl.append(cityButton);
+
+    searchedCitiesEl.on("click", "button", function (event) {
+        event.preventDefault();
+
+        console.log("Clicked");
+        var i = $(this).text().trim();
+        getCoordinates(i);
+
+    });
 
 }
-
 
 
 // function to get the city check for errors and if none run getting data for it.
 var formSubmitHandler = function (event) {
     event.preventDefault();
-    // console.log("submitted");
+    console.log("city entered");
     // takes city name as a string makes it to upper case to handle future errors with same names in camelcase or in lowercase
     var city = cityNameInputEl.val().trim().toUpperCase();
     cityNameFromInput = city;
-    console.log(city);
+    console.log("It is " + city);
+    console.log("calling loadCities");
     loadCities();
-
     if (city) {
-        var previousSearch = cities.includes(city)
-        // if the same button and city search already exists
-        if (!previousSearch) {
+        // if the same city in array and city search already exists
+        console.log("checking if city was entered already in citiesArray")
+        if (!cities.includes(city)) {
             cities.push(city);
             saveCities();
-            console.log(cities);
-            var cityButton = "<button class='searched-city-button button is-light'>" + city + "</button>"
-            // add city for the search history here
-            searchedCitiesEl.append(cityButton);
-            
-            getCoordinates(city);
-            
+            console.log(" in !previous " + cities);
+            // var cityButton = "<button class='searched-city-button button is-light'>" + city + "</button>"
+            // // add city for the search history here
+            // searchedCitiesEl.append(cityButton);
+
+            // getCoordinates(city);
+
+
+            displaySearchedCities(city);
+
             cityNameInputEl.val("");
-            
+
         } else {
             // and don't add it to button
             alert("Please enter a new city");
@@ -75,7 +96,7 @@ var formSubmitHandler = function (event) {
         //add if city doesn't exist error handler
         // needs to display the same as clicked with its name as a city parameter
 
-
+        console.log("in form submit " + cities)
 
     } else {
         alert("Please enter a city you would like to look up weather for");
@@ -96,46 +117,6 @@ var getCoordinates = function (cityName) {
     })
 };
 
-// var getCityWeatherRepo = function (latitude, longitude) {
-//     // console.log(latitude)
-//     // console.log(longitude)
-
-//     var weatherApi = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=' + apiKey;
-//     $.get(weatherApi, function (data) {
-//         console.log(data);
-//         // need display 
-//         //city name
-//         console.log("City name : ");
-//         console.log(data.name);
-
-//         //date 
-//         console.log("The day of : ");
-//         console.log(dateConvert(data.dt));
-
-//         console.log("Condition on the street is :");
-//         //icon of the weather
-//         console.log(data.weather[0].icon);
-//         //temperature
-//         console.log("Temperature");
-//         console.log(data.main.temp);
-//         // humidity
-//         console.log("Humidity");
-//         console.log(data.main.humidity);
-//         // wind speed
-//         console.log("Wind speed");
-//         console.log(data.wind.speed);
-//         //uv index - should be color coded with favorable - green moderate - yellow and severe - red.
-//         console.log("UV index");
-//         // console.log(data.uvi);
-
-
-
-//     })
-// };
-
-
-
-
 // gets data for 8 days need to iterate just for 5 0<5
 var getFiveDayForecast = function (latitude, longitude) {
     var weatherApi = "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&units=imperial&exclude=minutely,hourly&appid=" + apiKey;
@@ -143,7 +124,7 @@ var getFiveDayForecast = function (latitude, longitude) {
         console.log(data);
         // iterate through 5 items and append as cards to the fivedayforecast 
         for (var day = 0; day < 5; day++) {
-
+            // variable for easy display
             var dayToDisplay = data.daily[day]
             var cityName = cityNameFromInput;
             var date = dateConvert(dayToDisplay.dt);
@@ -153,10 +134,6 @@ var getFiveDayForecast = function (latitude, longitude) {
             var windSpeed = dayToDisplay.wind_speed;
             var humidity = dayToDisplay.humidity;
             var uvIndex = dayToDisplay.uvi;
-
-
-
-
 
             console.log(dayToDisplay)
             // need display 
@@ -209,23 +186,19 @@ var capitalizeString = function (str) {
     return stringCapitalized;
 }
 
-var displaySearchedCities = function(city) {
-    var cityButton = "<button class='searched-city-button button is-light'>" + city + "</button>"
-    // add city for the search history here
-    searchedCitiesEl.append(cityButton);
-}
-
-
-
+// uploadd cities stored in local storage
+loadCities();
 // add a click event for old search saved cities to direct to the same formsubmitHandler with their information.
 userFormEl.on("submit", formSubmitHandler);
 // cityButtonEl.on("click", getCoordinates($(this.val())));
 
-searchedCitiesEl.on("click", "button", function (event) {
-    event.preventDefault();
+// searchedCitiesEl.on("click", "button", function (event) {
+//     event.preventDefault();
 
-    console.log("Clicked");
-    var i = $(this).text().trim();
-    getCoordinates(i);
+//     console.log("Clicked");
+//     var i = $(this).text().trim();
+//     getCoordinates(i);
 
-});
+// });
+
+// i need to fix click on button should display the information for this button city.
