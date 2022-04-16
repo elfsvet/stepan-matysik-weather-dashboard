@@ -25,7 +25,7 @@ var loadCities = function () {
     citiesLoad = JSON.parse(citiesLoad);
     
     for (var i = 0; i < citiesLoad.length; i++) {
-        
+        // need to display the buttons inside searched cities
         cities.push(citiesLoad[i]);
     }
 };
@@ -49,6 +49,7 @@ var formSubmitHandler = function (event) {
     var city = cityNameInputEl.val().trim().toUpperCase();
     cityNameFromInput = city;
     console.log(city);
+    loadCities();
 
     if (city) {
         var previousSearch = cities.includes(city)
@@ -207,6 +208,14 @@ var capitalizeString = function (str) {
     var stringCapitalized = str.charAt(0).toUpperCase() + str.slice(1);
     return stringCapitalized;
 }
+
+var displaySearchedCities = function(city) {
+    var cityButton = "<button class='searched-city-button button is-light'>" + city + "</button>"
+    // add city for the search history here
+    searchedCitiesEl.append(cityButton);
+}
+
+
 
 // add a click event for old search saved cities to direct to the same formsubmitHandler with their information.
 userFormEl.on("submit", formSubmitHandler);
