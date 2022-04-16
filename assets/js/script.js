@@ -45,8 +45,8 @@ var displaySearchedCities = function (city) {
 var formSubmitHandler = function (event) {
     event.preventDefault();
     // console.log("submitted");
-    // takes city name as a string 
-    var city = cityNameInputEl.val().trim().toLowerCase();
+    // takes city name as a string makes it to upper case to handle future errors with same names in camelcase or in lowercase
+    var city = cityNameInputEl.val().trim().toUpperCase();
     cityNameFromInput = city;
     console.log(city);
 
