@@ -8,7 +8,7 @@ var cityNameInputEl = $("#city-name");
 var searchedCitiesEl = $(".searched-cities");
 var displayCityNameEl = $(".display-city-name");
 var cityButtonEl = $(".searched-city-button");
-
+var oneDayForecastEl = $('.one-day-forecast')
 // variables
 var latitude;
 var longitude;
@@ -31,7 +31,7 @@ var loadCities = function () {
             // need to display the buttons inside searched cities
             if (!cities.includes(citiesLoad[i])) {
                 displaySearchedCities(citiesLoad[i])
-                cities.push(citiesLoad[i]); 
+                cities.push(citiesLoad[i]);
             }
         }
     }
@@ -43,18 +43,15 @@ var saveCities = function () {
 };
 // function to display cities as buttons
 var displaySearchedCities = function (city) {
+
     var cityButton = "<button class='searched-city-button button is-light'>" + city + "</button>"
     // add city for the search history here
+    displayCityNameEl.html(city);
+    // create this button using jquery
+    // searchedCitiesEl.add("button", city).addClass("searched-city-button button is-light");
+
     searchedCitiesEl.append(cityButton);
 
-    searchedCitiesEl.on("click", "button", function (event) {
-        event.preventDefault();
-
-        console.log("Clicked");
-        var i = $(this).text().trim();
-        getCoordinates(i);
-
-    });
 
 }
 
@@ -113,64 +110,111 @@ var getCoordinates = function (cityName) {
         // console.log(latitude);
         longitude = data[0].lon;
         // getCityWeatherRepo(latitude, longitude);
-        getFiveDayForecast(latitude, longitude);
+        getFiveDayForecast(latitude, longitude, cityName);
     })
 };
 
 // gets data for 8 days need to iterate just for 5 0<5
-var getFiveDayForecast = function (latitude, longitude) {
+var getFiveDayForecast = function (latitude, longitude, cityName) {
     var weatherApi = "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&units=imperial&exclude=minutely,hourly&appid=" + apiKey;
     $.get(weatherApi, function (data) {
+        console.log("Data of the latitude longitude " + latitude + " and " + longitude)
         console.log(data);
+        displayCurrentWeather(data, cityName);
+        displayFiveDayForecast(data, cityName);
         // iterate through 5 items and append as cards to the fivedayforecast 
-        for (var day = 0; day < 5; day++) {
-            // variable for easy display
-            var dayToDisplay = data.daily[day]
-            var cityName = cityNameFromInput;
-            var date = dateConvert(dayToDisplay.dt);
-            var condition = capitalizeString(dayToDisplay.weather[0].description);
-            var iconLink = 'http://openweathermap.org/img/wn/' + dayToDisplay.weather[0].icon + '.png'
-            var temp = Math.round(dayToDisplay.temp.day);
-            var windSpeed = dayToDisplay.wind_speed;
-            var humidity = dayToDisplay.humidity;
-            var uvIndex = dayToDisplay.uvi;
+        // for (var day = 0; day < 6; day++) {
+        //     displayCityNameEl.html(cityName);
 
-            console.log(dayToDisplay)
-            // need display 
-            //city name
-            console.log("City name : ");
-            console.log(cityName);
-            displayCityNameEl.html(cityName);
-
-            //date
-            console.log("The day of : ");
-            console.log(date);
+        //     // variable for easy display
+        //     var dayToDisplay = data.daily[day]
+        //     var date = dateConvert(dayToDisplay.dt);
+        //     var condition = capitalizeString(dayToDisplay.weather[0].description);
+        //     var iconLink = 'http://openweathermap.org/img/wn/' + dayToDisplay.weather[0].icon + '.png'
+        //     var temp = Math.round(dayToDisplay.temp.day);
+        //     var windSpeed = dayToDisplay.wind_speed;
+        //     var humidity = dayToDisplay.humidity;
+        //     var uvIndex = dayToDisplay.uvi;
 
 
-            // text of the condition
-            console.log("Condition on the street is :");
-            // var conditionDiscription = capitalizeString(dayToDisplay.weather[0].description);
-            console.log(condition);
-            // icon of the weather
-            console.log(iconLink);
-            // temperature day temp
-            console.log("Temperature");
-            console.log(temp);
-            // wind speed
-            console.log("Wind speed");
-            console.log(windSpeed);
-            // humidity
-            console.log("Humidity");
-            console.log(humidity);
-            // uv index
-            console.log("UV index");
-            console.log(uvIndex);
+        //     // to display current weather
+        //     if (day === 0) {
+        //         // i should display city name + (date) + icon condition in a board box
+        //         //city name
+        //         // console.log("City name : " + cityName);
+
+        //         var currentWthr = $("#current-weather");
+
+        //         displayCityNameEl.html(cityName);
+
+
+        //         currentWthr.children(".date").html(date);
+
+        //         // icon of the weather
+        //         currentWthr.children(".condition").attr('src', iconLink).attr('alt', condition);
+
+        //         var oneDF = currentWthr.children(".one-day-forecast");
+
+
+        //         oneDF.children('.temp').html('Temp: ' + temp + ' F');
+        //         oneDF.children(".wind").html('Wind: ' + windSpeed + ' MPH')
+
+        //         oneDF.children(".humidity").html('Humidity: ' + humidity + ' %')
+        //         // uv index
+        //         oneDF.children(".uv-index").html('UV Index: ' + uvIndex)
 
 
 
 
 
-        }
+
+
+        //         // oneDayForecastEl.html(dayToDisplay);
+        //         //display (date)
+        //         // oneDayForecastEl.add("div").addClass("date").html(dayToDisplay)
+
+
+        //     }
+        //     else {
+        //         // else display the rest days in 5 day forecast:
+        //         //should be column of date + icon condition + temp: 00.00 F + wind: 00.00 MPH + humidity: 00 %
+        //         console.log(dayToDisplay)
+        //         var fiveDF = $(".five-day-forecast")
+        //         // need display 
+
+        //         //date
+        //         console.log("The day of : ");
+        //         fiveDF.children(".date").html(date);
+        //         console.log(date);
+        //         // text of the condition
+        //         console.log("Condition on the street is :");
+        //         // var conditionDiscription = capitalizeString(dayToDisplay.weather[0].description);
+        //         console.log(condition);
+        //         // icon of the weather
+        //         fiveDF.children(".condition").attr('src', iconLink).attr('alt', condition);
+        //         console.log(iconLink);
+        //         // temperature day temp
+        //         console.log("Temperature");
+        //         fiveDF.children(".temp").html('Temp: ' + temp + ' F')
+        //         console.log(temp);
+        //         // wind speed
+        //         console.log("Wind speed");
+        //         fiveDF.children(".wind").html('Wind: ' + windSpeed + ' MPH')
+        //         console.log(windSpeed);
+        //         // humidity
+        //         console.log("Humidity");
+        //         fiveDF.children(".humidity").html('Humidity: ' + humidity + ' %')
+        //         console.log(humidity);
+        //         // uv index
+        //         console.log("UV index");
+        //         fiveDF.children(".uv-index").html('UV Index: ' + uvIndex)
+        //         console.log(uvIndex);
+        //     }
+
+
+
+
+        // }
     })
 };
 
@@ -186,19 +230,100 @@ var capitalizeString = function (str) {
     return stringCapitalized;
 }
 
+
+var displayCurrentWeather = function (data, cityName) {
+
+    var day = 0;
+    displayCityNameEl.html(cityName);
+    var dayToDisplay = data.daily[day]
+    var date = dateConvert(dayToDisplay.dt);
+    var condition = capitalizeString(dayToDisplay.weather[0].description);
+    var iconLink = 'http://openweathermap.org/img/wn/' + dayToDisplay.weather[0].icon + '.png'
+    var temp = Math.round(dayToDisplay.temp.day);
+    var windSpeed = dayToDisplay.wind_speed;
+    var humidity = dayToDisplay.humidity;
+    var uvIndex = dayToDisplay.uvi;
+
+    var currentWthrEl = $("#current-weather");
+
+    displayCityNameEl.html(cityName);
+
+
+    currentWthrEl.children(".date").html(date);
+
+    // icon of the weather
+    currentWthrEl.children(".condition").attr('src', iconLink).attr('alt', condition);
+
+    var oneDFEl = currentWthrEl.children(".one-day-forecast");
+
+
+    oneDFEl.children('.temp').html('Temp: ' + temp + ' F');
+    oneDFEl.children(".wind").html('Wind: ' + windSpeed + ' MPH')
+
+    oneDFEl.children(".humidity").html('Humidity: ' + humidity + ' %')
+    // uv index
+    oneDFEl.children(".uv-index").html('UV Index: ' + uvIndex)
+
+
+}
+
+var displayFiveDayForecast = function (data, cityName) {
+    for (var day = 1; day < 6; day++) {
+        displayCityNameEl.html(cityName);
+        var dayToDisplay = data.daily[day]
+        var date = dateConvert(dayToDisplay.dt);
+        var condition = capitalizeString(dayToDisplay.weather[0].description);
+        var iconLink = 'http://openweathermap.org/img/wn/' + dayToDisplay.weather[0].icon + '.png'
+        var temp = Math.round(dayToDisplay.temp.day);
+        var windSpeed = dayToDisplay.wind_speed;
+        var humidity = dayToDisplay.humidity;
+        var uvIndex = dayToDisplay.uvi;
+
+
+        var fiveDFEl = $(".five-day-forecast")
+        // need display 
+
+        //date
+        fiveDFEl.children(".date").html(date);
+        // text of the condition
+        // var conditionDiscription = capitalizeString(dayToDisplay.weather[0].description);
+        // icon of the weather
+        fiveDFEl.children(".condition").attr('src', iconLink).attr('alt', condition);
+        // temperature day temp
+        fiveDFEl.children(".temp").html('Temp: ' + temp + ' F')
+        // wind speed
+        fiveDFEl.children(".wind").html('Wind: ' + windSpeed + ' MPH')
+        // humidity
+        fiveDFEl.children(".humidity").html('Humidity: ' + humidity + ' %')
+        // uv index
+        fiveDFEl.children(".uv-index").html('UV Index: ' + uvIndex)
+
+
+
+
+
+
+
+
+
+    }
+}
+
+
 // uploadd cities stored in local storage
 loadCities();
 // add a click event for old search saved cities to direct to the same formsubmitHandler with their information.
+// remove line with city if none was called yet
+displayCityNameEl.html("");
 userFormEl.on("submit", formSubmitHandler);
-// cityButtonEl.on("click", getCoordinates($(this.val())));
 
-// searchedCitiesEl.on("click", "button", function (event) {
-//     event.preventDefault();
+searchedCitiesEl.on("click", "button", function (event) {
+    event.preventDefault();
 
-//     console.log("Clicked");
-//     var i = $(this).text().trim();
-//     getCoordinates(i);
+    console.log("Clicked");
+    var city = $(this).text().trim();
+    console.log(city);
+    // need to fix this to target button text it clicked and bring it data
+    getCoordinates(city);
 
-// });
-
-// i need to fix click on button should display the information for this button city.
+});
