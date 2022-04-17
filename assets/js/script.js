@@ -10,6 +10,7 @@ var cityButtonEl = $(".searched-city-button");
 var oneDayForecastEl = $('.one-day-forecast')
 var currentWeatherEl = $("#current-weather");
 var fiveDayEl = $("#five-day");
+var deleteBtn = $('delete-btn')
 // ! variables--
 var latitude;
 var longitude;
@@ -210,5 +211,12 @@ searchedCitiesEl.on("click", "button", function (event) {
     var city = $(this).text().trim();
     // need to fix this to target button text it clicked and bring it data
     getCoordinates(city);
-
 });
+
+// add delete buton and manage it functiional to remove stored information from local storage and from cities list
+deleteBtn.on("click", function (event) {
+    // need to finish it think it's not linked properly
+    localStorage.removeItem("cities");
+    cities = [];
+    searchedCitiesEl.children().remove("button")
+})
