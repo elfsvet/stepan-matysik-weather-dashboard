@@ -1,8 +1,8 @@
 # stepan-matysik-weather-dashboard
 
-# Stepan Matysik's Code Quiz
+# Stepan Matysik's Weather Dashboard
 > Weather Dashboard project. A website with a weather forecast.
-> Live demo [_here_](https://elfsvet.github.io/steapan-matysik-code-quiz/). 
+> Live demo [_here_](https://elfsvet.github.io/stepan-matysik-weather-dashboard/). 
 
 ## Table of contents
 * [General info](#general-info)
@@ -20,69 +20,66 @@
 
 
 ## General Info
-This is a time-strict coding quiz with multiple-choice questions and score results.
+Current app will display current weather and 5-day forecast for a chosen city. The search cities will be stored for easy access.
 
 ## Technologies
 Project is created with:
 - HTML
 - CSS
 - JavaScript
+- jQuery
 
 ## Setup
 To open this project in vscode using git in Terminal/Git Bash:
 
 ```
-$ mkdir code-quiz
+$ mkdir weather-dashboard
 $ cd code-quiz
-$ git clone https://github.com/elfsvet/steapan-matysik-code-quiz.git
+$ git clone https://github.com/elfsvet/stepan-matysik-weather-dashboard.git
 $ code .
 ```
 
 ## Instructions
-1. Click "Start Quiz":
-   - Timer on the top right will start to run
-   - Total time is 66 second with 11 questions in total
-   - The "View High Scores" link on the top left will direct the user to view all current high scores, if any.
+1. Enter a city and click "Search":
+   - The city will be added to quick search section.
+   - Current forecast will be displayed with whole information for a day.
+   - 5-day forecast will be displayed with weather information for 5 days.
 
 
-2. A series of questions are presented with multiple choice answers:
-   - If the question is answered wrong, 10 seconds will be deducted to the timer
-   - If the question is answered correctly, will add 10 to the score
-   - After a question is answered, it will show on the bottom whether it is answered correctly or wrong.
-  
-3. When all questions are answered or the timer reaches 0, game is over.
+2. You can start a new search, just follow instruction in step 1.
+- If you have previous city search displayed on the screen, new search will replace it.
+
+3. If you want to quick access the previously searched cities, just click on the name of the city.
+- Current and 5-day forecast will be displayed to the screen.
    
-4. When game is over, the user can enter initial and score, click "Submit" to save to high scores to local storage.
-   
-5. Then it will show a list of saved high scores.
-   
-6. The user then will have the option to click on "Go Back" to start quiz again, or "Clear High Scores" to clear saved scores.
+4. To clean quick search of all cities, click "Delete Cities".
 
 
 ## Features
 - API
 - DOM
 - localStorage
+- jQuery
 
 ## Screenshots
-![Example screenshot](./assets/images/small-screen.jpg)
+![Example screenshot](./assets/images/screen-shot.gif)
 
 
 ## Usage
-For practising and checking your knowledge.
+For information that helps you plan your outfit for day and week.
 
 ## Project Status
 Project is: _complete_
 
 ## Room for Improvement
 To do:
-- Can have a numbers in front of answers.
-- Can shuffle the order of questions and answers.
+- Can have more API calls.
+- Can display current weather by hour.
 
 ## Acknowledgements
-- This project was inspired by UM Coding Boot Camp
-- This project was creating from scratch using a gif picture.
-![Example gif](./assets/images/sample.gif)
+- This project was inspired by UM Coding Boot Camp Challenge #6.
+- This project was creating from scratch using a picture.
+![Example gif](./assets/images/example.png)
 ## Contact
 Created by [@elfsvet](https://github.com/elfsvet)
 - [LinkedIn](https://www.linkedin.com/in/stepanmatysik/)

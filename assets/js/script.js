@@ -44,7 +44,7 @@ var saveCities = function () {
 // function to display cities as buttons
 var displaySearchedCities = function (city) {
 
-    var cityButton = "<button type='button' class='searched-city-button col-12 btn  btn-info my-2'>" + city + "</button>"
+    var cityButton = "<button type='button' class='searched-city-button col-12 btn  btn-light my-2'>" + city + "</button>"
     // add city for the search history here
     displayCityNameEl.html(city);
     searchedCitiesEl.append(cityButton);
