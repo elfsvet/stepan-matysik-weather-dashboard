@@ -122,99 +122,6 @@ var getFiveDayForecast = function (latitude, longitude, cityName) {
         console.log(data);
         displayCurrentWeather(data, cityName);
         displayFiveDayForecast(data, cityName);
-        // iterate through 5 items and append as cards to the fivedayforecast 
-        // for (var day = 0; day < 6; day++) {
-        //     displayCityNameEl.html(cityName);
-
-        //     // variable for easy display
-        //     var dayToDisplay = data.daily[day]
-        //     var date = dateConvert(dayToDisplay.dt);
-        //     var condition = capitalizeString(dayToDisplay.weather[0].description);
-        //     var iconLink = 'http://openweathermap.org/img/wn/' + dayToDisplay.weather[0].icon + '.png'
-        //     var temp = Math.round(dayToDisplay.temp.day);
-        //     var windSpeed = dayToDisplay.wind_speed;
-        //     var humidity = dayToDisplay.humidity;
-        //     var uvIndex = dayToDisplay.uvi;
-
-
-        //     // to display current weather
-        //     if (day === 0) {
-        //         // i should display city name + (date) + icon condition in a board box
-        //         //city name
-        //         // console.log("City name : " + cityName);
-
-        //         var currentWthr = $("#current-weather");
-
-        //         displayCityNameEl.html(cityName);
-
-
-        //         currentWthr.children(".date").html(date);
-
-        //         // icon of the weather
-        //         currentWthr.children(".condition").attr('src', iconLink).attr('alt', condition);
-
-        //         var oneDF = currentWthr.children(".one-day-forecast");
-
-
-        //         oneDF.children('.temp').html('Temp: ' + temp + ' F');
-        //         oneDF.children(".wind").html('Wind: ' + windSpeed + ' MPH')
-
-        //         oneDF.children(".humidity").html('Humidity: ' + humidity + ' %')
-        //         // uv index
-        //         oneDF.children(".uv-index").html('UV Index: ' + uvIndex)
-
-
-
-
-
-
-
-        //         // oneDayForecastEl.html(dayToDisplay);
-        //         //display (date)
-        //         // oneDayForecastEl.add("div").addClass("date").html(dayToDisplay)
-
-
-        //     }
-        //     else {
-        //         // else display the rest days in 5 day forecast:
-        //         //should be column of date + icon condition + temp: 00.00 F + wind: 00.00 MPH + humidity: 00 %
-        //         console.log(dayToDisplay)
-        //         var fiveDF = $(".five-day-forecast")
-        //         // need display 
-
-        //         //date
-        //         console.log("The day of : ");
-        //         fiveDF.children(".date").html(date);
-        //         console.log(date);
-        //         // text of the condition
-        //         console.log("Condition on the street is :");
-        //         // var conditionDiscription = capitalizeString(dayToDisplay.weather[0].description);
-        //         console.log(condition);
-        //         // icon of the weather
-        //         fiveDF.children(".condition").attr('src', iconLink).attr('alt', condition);
-        //         console.log(iconLink);
-        //         // temperature day temp
-        //         console.log("Temperature");
-        //         fiveDF.children(".temp").html('Temp: ' + temp + ' F')
-        //         console.log(temp);
-        //         // wind speed
-        //         console.log("Wind speed");
-        //         fiveDF.children(".wind").html('Wind: ' + windSpeed + ' MPH')
-        //         console.log(windSpeed);
-        //         // humidity
-        //         console.log("Humidity");
-        //         fiveDF.children(".humidity").html('Humidity: ' + humidity + ' %')
-        //         console.log(humidity);
-        //         // uv index
-        //         console.log("UV index");
-        //         fiveDF.children(".uv-index").html('UV Index: ' + uvIndex)
-        //         console.log(uvIndex);
-        //     }
-
-
-
-
-        // }
     })
 };
 
@@ -269,7 +176,9 @@ var displayCurrentWeather = function (data, cityName) {
 
 var displayFiveDayForecast = function (data, cityName) {
     for (var day = 1; day < 6; day++) {
+        //sets city name at the top
         displayCityNameEl.html(cityName);
+        // create a variable 
         var dayToDisplay = data.daily[day]
         var date = dateConvert(dayToDisplay.dt);
         var condition = capitalizeString(dayToDisplay.weather[0].description);
@@ -297,15 +206,6 @@ var displayFiveDayForecast = function (data, cityName) {
         fiveDFEl.children(".humidity").html('Humidity: ' + humidity + ' %')
         // uv index
         fiveDFEl.children(".uv-index").html('UV Index: ' + uvIndex)
-
-
-
-
-
-
-
-
-
     }
 }
 
