@@ -52,12 +52,9 @@ var displaySearchedCities = function (city) {
 // function to get the city check for errors and if none run getting data for it.
 var formSubmitHandler = function (event) {
     event.preventDefault();
-    console.log("city entered");
     // takes city name as a string makes it to upper case to handle future errors with same names in camelcase or in lowercase
     var city = cityNameInputEl.val().trim().toUpperCase();
     cityNameFromInput = city;
-    console.log("It is " + city);
-    console.log("calling loadCities");
     loadCities();
     if (city) {
         // if the same city in array and city search already exists
@@ -65,16 +62,9 @@ var formSubmitHandler = function (event) {
         if (!cities.includes(city)) {
             cities.push(city);
             saveCities();
-            console.log(" in !previous " + cities);
-            // var cityButton = "<button class='searched-city-button button is-light'>" + city + "</button>"
-            // // add city for the search history here
-            // searchedCitiesEl.append(cityButton);
-
-            // getCoordinates(city);
-
             getCoordinates(city);
             displaySearchedCities(city);
-
+            // clean the input line
             cityNameInputEl.val("");
 
         } else {
@@ -88,27 +78,22 @@ var formSubmitHandler = function (event) {
         alert("Please enter a city you would like to look up weather for");
     }
 }
-
+// get coordinates needed for geo use in api
 var getCoordinates = function (cityName) {
-    // var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + apiKey;
     var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=' + apiKey;
-
+// retrive data from the link we provided and assign values for variables we declared earlier
     $.get(apiUrl, function (data) {
-        // console.log(data)
         latitude = data[0].lat;
-        // console.log(latitude);
         longitude = data[0].lon;
-        // getCityWeatherRepo(latitude, longitude);
+        // call function getForecast to get weather information for 8 days from which we will use only 6
         getForecast(latitude, longitude, cityName);
     })
 };
 
-// gets data for 8 days need to iterate just for 5 0<5
+// gets data for 8 days need to iterate just for 6 0<6
 var getForecast = function (latitude, longitude, cityName) {
     var weatherApi = "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&units=imperial&exclude=minutely,hourly&appid=" + apiKey;
     $.get(weatherApi, function (data) {
-        console.log("Data of the latitude longitude " + latitude + " and " + longitude)
-        console.log(data);
         displayCurrentWeather(data, cityName);
         displayFiveDayForecast(data, cityName);
     })
@@ -126,7 +111,7 @@ var capitalizeString = function (str) {
     return stringCapitalized;
 }
 
-
+// display weather for today
 var displayCurrentWeather = function (data, cityName) {
     // ! variables --
     var day = 0;
@@ -139,20 +124,21 @@ var displayCurrentWeather = function (data, cityName) {
     var humidity = dayToDisplay.humidity;
     var uv = dayToDisplay.uvi;
     // ! references --
-
+// create new elements inside div - current weather
     if (!currentWeatherEl.children(".city").length) {
         currentWeatherEl.append('<h3 class="city">' + cityName + '</h3>');
-        currentWeatherEl.append('<span class="date">(' + date + ')</span>');
+        currentWeatherEl.append('<span class="date">' + date + '</span>');
         currentWeatherEl.append('<img class="icon" src="' + iconLink + '" alt="' + condition + '"></ >');
         currentWeatherEl.append('<div class="one-day"></div>');
         var oneDay = currentWeatherEl.children(".one-day");
         oneDay.append('<p class="temp">Temp: ' + temp + ' F</p>');
         oneDay.append('<p class="wind">Wind: ' + wind + ' MPH</p>');
         oneDay.append('<p class="humidity">Humidity: ' + humidity + ' %</p>');
-        oneDay.append('<p class="uv">UV Index: ' + uv + '</p>');      
+        oneDay.append('<p class="uv">UV Index: ' + uv + '</p>');
     } else {
+        // if we change the city and we had information on the page. refresh it.
         currentWeatherEl.children(".city").html(cityName);
-        currentWeatherEl.children(".date").html("("+date+")");
+        currentWeatherEl.children(".date").html(date);
         currentWeatherEl.children(".icon").attr("src", iconLink).attr("alt", condition);
         currentWeatherEl.children(".one-day").children(".temp").html('Temp: ' + temp + ' F');
         currentWeatherEl.children(".one-day").children(".wind").html('Wind: ' + wind + ' MPH');
@@ -160,7 +146,9 @@ var displayCurrentWeather = function (data, cityName) {
         currentWeatherEl.children(".one-day").children(".uv").html('UV Index: ' + uv);
     }
 }
+// display weather for tomorrow and + 4 more days
 var displayFiveDayForecast = function (data, cityName) {
+    // loop to not repeat myself and display all in one run
     for (var day = 1; day < 6; day++) {
         // create a variable 
         var dayToDisplay = data.daily[day];
@@ -171,13 +159,16 @@ var displayFiveDayForecast = function (data, cityName) {
         var wind = dayToDisplay.wind_speed;
         var humidity = dayToDisplay.humidity;
         var uv = dayToDisplay.uvi;
+        // for easy reference with jquery new id var day will update with iteration
         var id = "#card-" + day;
         // if first time run
         if (!fiveDayEl.children("#card-5").length) {
+            // if we don't have heading, display it
             if (!fiveDayEl.children(".title").length) {
-                fiveDayEl.append('<h3 class="title">5-Day Forecast</h3>');
+                fiveDayEl.append('<h3 class="title">5-Day Forecast:</h3>');
             }
-            fiveDayEl.append('<div id="card-' + day + '" class="card"></div>');
+            // create new card with all information
+            fiveDayEl.append('<div id="card-' + day + '" class="card col-2"></div>');
             $(id).append('<p class="date">' + date + '</p>');
             $(id).append('<img class="icon" src="' + iconLink + '" alt="' + condition + '"></ >');
             $(id).append('<div class="one-day"></div>');
@@ -186,6 +177,7 @@ var displayFiveDayForecast = function (data, cityName) {
             $(id).append('<p class="humidity">Humidity: ' + humidity + ' %</p>');
             $(id).append('<p class="uv">UV Index: ' + uv + '</p>');
         } else {
+            // if we change the city and we had information on the page. refresh it.
             $(id).children('.date').html(date);
             $(id).children('.icon').html(date);
             $(id).children('.temp').html('Temp: ' + temp + ' F');
@@ -193,24 +185,6 @@ var displayFiveDayForecast = function (data, cityName) {
             $(id).children('.humidity').html('Humidity: ' + humidity + ' %');
             $(id).children('.uv').html('UV Index: ' + uv);
         }
-
-        // var fiveDFEl = $(".five-day-forecast")
-        // // need display 
-
-        // //date
-        // fiveDFEl.children(".date").html(date);
-        // // text of the condition
-        // // var conditionDiscription = capitalizeString(dayToDisplay.weather[0].description);
-        // // icon of the weather
-        // fiveDFEl.children(".condition").attr('src', iconLink).attr('alt', condition);
-        // // temperature day temp
-        // fiveDFEl.children(".temp").html('Temp: ' + temp + ' F')
-        // // wind speed
-        // fiveDFEl.children(".wind").html('Wind: ' + wind + ' MPH')
-        // // humidity
-        // fiveDFEl.children(".humidity").html('Humidity: ' + humidity + ' %')
-        // // uv index
-        // fiveDFEl.children(".uv-index").html('UV Index: ' + uv)
     }
 }
 
@@ -224,10 +198,7 @@ userFormEl.on("submit", formSubmitHandler);
 
 searchedCitiesEl.on("click", "button", function (event) {
     event.preventDefault();
-
-    console.log("Clicked");
     var city = $(this).text().trim();
-    console.log(city);
     // need to fix this to target button text it clicked and bring it data
     getCoordinates(city);
 
