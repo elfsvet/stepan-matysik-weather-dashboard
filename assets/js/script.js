@@ -42,7 +42,7 @@ var saveCities = function () {
 // function to display cities as buttons
 var displaySearchedCities = function (city) {
 
-    var cityButton = "<button class='searched-city-button button is-light'>" + city + "</button>"
+    var cityButton = "<button type='button' class='searched-city-button col-12 btn  btn-info my-2'>" + city + "</button>"
     // add city for the search history here
     displayCityNameEl.html(city);
     searchedCitiesEl.append(cityButton);
@@ -60,6 +60,7 @@ var formSubmitHandler = function (event) {
         // if the same city in array and city search already exists
         console.log("checking if city was entered already in citiesArray")
         if (!cities.includes(city)) {
+            //would need to add check if the city is a city then do function if not return alert
             cities.push(city);
             saveCities();
             getCoordinates(city);
@@ -81,12 +82,19 @@ var formSubmitHandler = function (event) {
 // get coordinates needed for geo use in api
 var getCoordinates = function (cityName) {
     var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=' + apiKey;
-// retrive data from the link we provided and assign values for variables we declared earlier
+    // retrive data from the link we provided and assign values for variables we declared earlier
     $.get(apiUrl, function (data) {
-        latitude = data[0].lat;
-        longitude = data[0].lon;
-        // call function getForecast to get weather information for 8 days from which we will use only 6
-        getForecast(latitude, longitude, cityName);
+        if (data.length) {
+            console.log("erroe should be here");
+            console.log(data);
+            latitude = data[0].lat;
+            longitude = data[0].lon;
+            // call function getForecast to get weather information for 8 days from which we will use only 6
+            getForecast(latitude, longitude, cityName);
+
+        } else {
+            alert("No such city in our records");
+        }
     })
 };
 
@@ -124,17 +132,18 @@ var displayCurrentWeather = function (data, cityName) {
     var humidity = dayToDisplay.humidity;
     var uv = dayToDisplay.uvi;
     // ! references --
-// create new elements inside div - current weather
+    // create new elements inside div - current weather
     if (!currentWeatherEl.children(".city").length) {
-        currentWeatherEl.append('<h3 class="city">' + cityName + '</h3>');
-        currentWeatherEl.append('<span class="date">' + date + '</span>');
-        currentWeatherEl.append('<img class="icon" src="' + iconLink + '" alt="' + condition + '"></ >');
+        currentWeatherEl.addClass("col-12 border border-secondary")
+        currentWeatherEl.append('<h3 class="city m-2 d-inline">' + cityName + '</h3>');
+        currentWeatherEl.append('<span class="date m-2">' + date + '</span>');
+        currentWeatherEl.append('<img class="icon m-2" src="' + iconLink + '" alt="' + condition + '"></ >');
         currentWeatherEl.append('<div class="one-day"></div>');
         var oneDay = currentWeatherEl.children(".one-day");
-        oneDay.append('<p class="temp">Temp: ' + temp + ' F</p>');
-        oneDay.append('<p class="wind">Wind: ' + wind + ' MPH</p>');
-        oneDay.append('<p class="humidity">Humidity: ' + humidity + ' %</p>');
-        oneDay.append('<p class="uv">UV Index: ' + uv + '</p>');
+        oneDay.append('<p class="temp m-2">Temp: ' + temp + ' F</p>');
+        oneDay.append('<p class="wind m-2">Wind: ' + wind + ' MPH</p>');
+        oneDay.append('<p class="humidity m-2">Humidity: ' + humidity + ' %</p>');
+        oneDay.append('<p class="uv m-2">UV Index: ' + uv + '</p>');
     } else {
         // if we change the city and we had information on the page. refresh it.
         currentWeatherEl.children(".city").html(cityName);
@@ -165,10 +174,10 @@ var displayFiveDayForecast = function (data, cityName) {
         if (!fiveDayEl.children("#card-5").length) {
             // if we don't have heading, display it
             if (!fiveDayEl.children(".title").length) {
-                fiveDayEl.append('<h3 class="title">5-Day Forecast:</h3>');
+                fiveDayEl.append('<h3 class="title fs-4 my-2">5-Day Forecast:</h3>');
             }
             // create new card with all information
-            fiveDayEl.append('<div id="card-' + day + '" class="card col-2"></div>');
+            fiveDayEl.append('<div id="card-' + day + '" class="col m-1 rounded text-white bg-secondary bg-gradient"></div>');
             $(id).append('<p class="date">' + date + '</p>');
             $(id).append('<img class="icon" src="' + iconLink + '" alt="' + condition + '"></ >');
             $(id).append('<div class="one-day"></div>');
@@ -179,7 +188,7 @@ var displayFiveDayForecast = function (data, cityName) {
         } else {
             // if we change the city and we had information on the page. refresh it.
             $(id).children('.date').html(date);
-            $(id).children('.icon').html(date);
+            $(id).children('.icon').attr("src", iconLink).attr("alt", condition);
             $(id).children('.temp').html('Temp: ' + temp + ' F');
             $(id).children('.wind').html('Wind: ' + wind + ' MPH');
             $(id).children('.humidity').html('Humidity: ' + humidity + ' %');

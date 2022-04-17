@@ -1,0 +1,12 @@
+/* font is big and start to wrap lines of text better to make it smaller */
+body {
+    font-size: 0.75rem;
+}
+
+/* font of big names is to big for small devices need to be adjasted  */
+@media screen and (max-width: 590px) {
+    .btn {
+        font-size: 0.75rem;
+    }
+
+}
