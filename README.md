@@ -59,7 +59,7 @@ $ code .
 - API
 - DOM
 - localStorage
-- jQuery
+- dynamically created elements
 
 ## Screenshots
 ![Example screenshot](./assets/images/screen-shot.gif)
