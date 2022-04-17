@@ -82,7 +82,7 @@ var formSubmitHandler = function (event) {
 }
 // get coordinates needed for geo use in api
 var getCoordinates = function (cityName) {
-    var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=' + apiKey;
+    var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=' + apiKey;
     // retrive data from the link we provided and assign values for variables we declared earlier
     $.get(apiUrl, function (data) {
         if (data.length) {
@@ -128,7 +128,7 @@ var displayCurrentWeather = function (data, cityName) {
     var dayToDisplay = data.daily[day]
     var date = dateConvert(dayToDisplay.dt);
     var condition = capitalizeString(dayToDisplay.weather[0].description);
-    var iconLink = 'http://openweathermap.org/img/wn/' + dayToDisplay.weather[0].icon + '.png'
+    var iconLink = 'https://openweathermap.org/img/wn/' + dayToDisplay.weather[0].icon + '.png'
     var temp = Math.round(dayToDisplay.temp.day);
     var wind = dayToDisplay.wind_speed;
     var humidity = dayToDisplay.humidity;
@@ -169,7 +169,7 @@ var displayFiveDayForecast = function (data, cityName) {
         var dayToDisplay = data.daily[day];
         var date = dateConvert(dayToDisplay.dt);
         var condition = capitalizeString(dayToDisplay.weather[0].description);
-        var iconLink = 'http://openweathermap.org/img/wn/' + dayToDisplay.weather[0].icon + '.png';
+        var iconLink = 'https://openweathermap.org/img/wn/' + dayToDisplay.weather[0].icon + '.png';
         var temp = Math.round(dayToDisplay.temp.day);
         var wind = dayToDisplay.wind_speed;
         var humidity = dayToDisplay.humidity;
