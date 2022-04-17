@@ -1,4 +1,5 @@
 //weather personal APIKey ending 8f22ad49c151f0bf1918e3b3dbe2b739
+// the api provider works poorly sometimes it returns uv data = 0 i left the uv console just for check
 var apiKey = "8f22ad49c151f0bf1918e3b3dbe2b739";
 // ! jquery references--
 var userFormEl = $("#user-form");
@@ -10,7 +11,7 @@ var cityButtonEl = $(".searched-city-button");
 var oneDayForecastEl = $('.one-day-forecast')
 var currentWeatherEl = $("#current-weather");
 var fiveDayEl = $("#five-day");
-var deleteBtn = $('delete-btn')
+var deleteBtn = $('#delete-btn')
 // ! variables--
 var latitude;
 var longitude;
@@ -59,7 +60,6 @@ var formSubmitHandler = function (event) {
     loadCities();
     if (city) {
         // if the same city in array and city search already exists
-        console.log("checking if city was entered already in citiesArray")
         if (!cities.includes(city)) {
             //would need to add check if the city is a city then do function if not return alert
             cities.push(city);
@@ -86,8 +86,6 @@ var getCoordinates = function (cityName) {
     // retrive data from the link we provided and assign values for variables we declared earlier
     $.get(apiUrl, function (data) {
         if (data.length) {
-            console.log("erroe should be here");
-            console.log(data);
             latitude = data[0].lat;
             longitude = data[0].lon;
             // call function getForecast to get weather information for 8 days from which we will use only 6
@@ -95,6 +93,9 @@ var getCoordinates = function (cityName) {
 
         } else {
             alert("No such city in our records");
+            searchedCitiesEl.children().remove(":contains("+cityName+")");
+            cities.pop();
+            saveCities();
         }
     })
 };
@@ -132,6 +133,7 @@ var displayCurrentWeather = function (data, cityName) {
     var wind = dayToDisplay.wind_speed;
     var humidity = dayToDisplay.humidity;
     var uv = dayToDisplay.uvi;
+    console.log("In case the API Down for UV Index will display 0. UV: " +uv)
     // ! references --
     // create new elements inside div - current weather
     if (!currentWeatherEl.children(".city").length) {
@@ -144,7 +146,9 @@ var displayCurrentWeather = function (data, cityName) {
         oneDay.append('<p class="temp m-2">Temp: ' + temp + ' F</p>');
         oneDay.append('<p class="wind m-2">Wind: ' + wind + ' MPH</p>');
         oneDay.append('<p class="humidity m-2">Humidity: ' + humidity + ' %</p>');
-        oneDay.append('<p class="uv m-2">UV Index: ' + uv + '</p>');
+        oneDay.append('<p class="uv m-2">UV Index: <span class="check-uv">' + uv + '</span></p>');
+        checkUv(uv);
+
     } else {
         // if we change the city and we had information on the page. refresh it.
         currentWeatherEl.children(".city").html(cityName);
@@ -153,7 +157,8 @@ var displayCurrentWeather = function (data, cityName) {
         currentWeatherEl.children(".one-day").children(".temp").html('Temp: ' + temp + ' F');
         currentWeatherEl.children(".one-day").children(".wind").html('Wind: ' + wind + ' MPH');
         currentWeatherEl.children(".one-day").children(".humidity").html('Humidity: ' + humidity + ' %');
-        currentWeatherEl.children(".one-day").children(".uv").html('UV Index: ' + uv);
+        currentWeatherEl.children(".one-day").children(".uv").children(".check-uv").html(uv);
+        checkUv(uv);
     }
 }
 // display weather for tomorrow and + 4 more days
@@ -197,6 +202,18 @@ var displayFiveDayForecast = function (data, cityName) {
         }
     }
 }
+// check uv to set background
+var checkUv = function (uv) {
+    var uvIndexEl = $(".check-uv");
+    if (uv <= 4) {
+        uvIndexEl.attr("class","check-uv bg-success text-white");
+    } else if (uv > 4 && uv <= 7) {
+        uvIndexEl.attr("class","check-uv bg-warning text-black");
+    } else {
+        uvIndexEl.attr("class","check-uv bg-danger text-white");
+    }
+};
+
 
 
 // upload cities stored in local storage
@@ -220,3 +237,4 @@ deleteBtn.on("click", function (event) {
     cities = [];
     searchedCitiesEl.children().remove("button")
 })
+
