@@ -34,7 +34,7 @@ To open this project in vscode using git in Terminal/Git Bash:
 
 ```
 $ mkdir weather-dashboard
-$ cd code-quiz
+$ cd weather-dashboard
 $ git clone https://github.com/elfsvet/stepan-matysik-weather-dashboard.git
 $ code .
 ```
